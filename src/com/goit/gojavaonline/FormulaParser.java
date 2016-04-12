@@ -83,6 +83,7 @@ public class FormulaParser {
         } else {
             parsedFormulaText.add(newElement);
         }
+
     }
 
     private void convertParsedTextIntoFormulaElements() {
@@ -93,7 +94,7 @@ public class FormulaParser {
             FormulaElement element = convertTextBlockIntoFormulaElement(textBlock);
             formulaIN.add(element);
         }
-        //System.out.println(formulaIN);
+     //   System.out.println(formulaIN);
     }
 
     private FormulaElement convertTextBlockIntoFormulaElement(FormulaTextBlock textBlock) {

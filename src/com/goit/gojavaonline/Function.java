@@ -85,7 +85,7 @@ public class Function implements Calculative {
         } else if (operator.equals(SupportedOperators.COS)) {
             result = Math.cos(operand);
         } else if (operator.equals(SupportedOperators.TN)) {
-            result = Math.atan(operand);
+            result = Math.tan(operand);
         } else if (operator.equals(SupportedOperators.LN)) {
             result = Math.log(operand);
         } else if (operator.equals(SupportedOperators.LG)) {
