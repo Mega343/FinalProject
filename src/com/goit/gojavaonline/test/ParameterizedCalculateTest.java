@@ -1,6 +1,7 @@
 package com.goit.gojavaonline.test;
 
 
+import com.goit.gojavaonline.Calculate;
 import com.goit.gojavaonline.FormulaParser;
 import com.goit.gojavaonline.Function;
 import junit.framework.Assert;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -15,58 +17,20 @@ import java.util.Collection;
 public class ParameterizedCalculateTest {
 
     private double a, b, c, e, expected;
-    private String functionString;
+    String function;
 
 
-    public ParameterizedCalculateTest(double a, double b, double c, double e, String functionString, double expected) {
+    public ParameterizedCalculateTest(double a, double b, double c, double e, String function, double expected) {
         this.a = a;
         this.b = b;
         this.c = c;
         this.e = e;
-        this.functionString = functionString;
         this.expected = expected;
+        this.function = function;
 
 
     }
-    public double extremumCalc(double a, double b, double c, double e, String functionString)  {
 
-
-        FormulaParser parser = new FormulaParser(functionString);
-        Function function1 = parser.parse();
-        Function function2 = function1;
-
-
-
-        double x = 0;
-        double func1, func2;
-        double func = 0;
-        boolean test = true;
-
-        while (test) {
-            x = (a + b) / 2;
-            function1.setX(x - e);
-            func1 = function1.calculate();
-            function2.setX(x + e);
-            func2 = function2.calculate();
-
-
-            if (c * func1 < c * func2) {
-                b = x;
-            } else {
-                a = x;
-            }
-            if (Math.abs(b - a) < e) {
-                x = (a + b) / 2;
-                function1.setX(x);
-                func = function1.calculate();
-                test = false;
-            } else {
-                test = true;
-            }
-        }
-
-        return func;
-    }
 
     @Parameterized.Parameters(name = "{index} = ok")
     public static Collection<Object[]> data() {
@@ -100,7 +64,10 @@ public class ParameterizedCalculateTest {
 
     @Test(timeout = 2000)
     public void testCalculate() throws Exception {
-        double func = extremumCalc(a, b, c, e, functionString);
+        Calculate calculate = new Calculate();
+        FormulaParser parser = new FormulaParser(function);
+        Function function = parser.parse();
+        double func = calculate.extremumCalculate(a, b, c, e, function);
         Assert.assertEquals(expected, func);
     }
 }

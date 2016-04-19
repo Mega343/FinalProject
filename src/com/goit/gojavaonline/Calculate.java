@@ -4,66 +4,43 @@ public class Calculate {
 
 
 
-    public double extremumCalc()  {
-        boolean read = true;
-        double c = 1;
-        UserInput input = new UserInput();
-        FormulaParser parser = new FormulaParser(input.userInputFormula());
-        Function function1 = parser.parse();
-        Function function2 = function1;
-        System.out.println("Please, enter interval start: ");
-        double a = input.userInput();
-        System.out.println("Please, enter end of interval: ");
-        double b = input.userInput();
-        System.out.println("Enter accuracy of calculation \"E\"");
-        double e = input.userInput();
-
-        while (read) {
-            System.out.println("Please, enter \"1\" if you want find Min or enter \"-1\" if you want find Max. ");
-            c = input.userInput();
-            if (c != -1 && c != 1) {
-                System.out.println("You type wrong c");
-                read = true;
-            } else {
-                read = false;
-            }
-        }
+    public double extremumCalculate(double a, double b, double c, double e, Function userInputFunction)  {
 
 
         double x = 0;
-        double func1, func2;
-        double func = 0;
-        boolean test = true;
+        double firstTempFunction, secondTempFunction;
+        double resultFunction = 0;
+        boolean accuracyLimit = true;
 
-        while (test) {
+        while (accuracyLimit) {
             x = (a + b) / 2;
-            function1.setX(x - e);
-           func1 = function1.calculate();
-            function2.setX(x + e);
-           func2 = function2.calculate();
+            userInputFunction.setX(x - e);
+            firstTempFunction = userInputFunction.calculate();
+            userInputFunction.setX(x + e);
+            secondTempFunction = userInputFunction.calculate();
 
 
-            if (c * func1 < c * func2) {
+            if (c * firstTempFunction < c * secondTempFunction) {
                 b = x;
             } else {
                 a = x;
             }
             if (Math.abs(b - a) < e) {
                 x = (a + b) / 2;
-               function1.setX(x);
-                func = function1.calculate();
-                test = false;
+                userInputFunction.setX(x);
+                resultFunction = userInputFunction.calculate();
+                accuracyLimit = false;
             } else {
-                test = true;
+                accuracyLimit = true;
             }
         }
         if(c == 1){
-            System.out.println("Minimum is " + x + ". Value of the function in this point = " + func);
+            System.out.println("Minimum is " + x + ". Value of the function in this point = " + resultFunction);
         }
         if(c == -1){
-            System.out.println("Maximum is " + x + ". Value of the function in this point = " + func);
+            System.out.println("Maximum is " + x + ". Value of the function in this point = " + resultFunction);
         }
-         return func;
+         return resultFunction;
     }
 
 }

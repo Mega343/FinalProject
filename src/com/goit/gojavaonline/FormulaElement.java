@@ -1,5 +1,7 @@
 package com.goit.gojavaonline;
 
+
+
 public class FormulaElement {
 
     private double value;
@@ -36,9 +38,10 @@ public class FormulaElement {
         if (this.getType().equals(FormulaElementTypes.NUMBER)){
             result = String.valueOf(value);
         } else if(this.getType().equals(FormulaElementTypes.OPERATOR)
-                || this.getType().equals(FormulaElementTypes.FUNCTION)){
+                || this.getType().equals(FormulaElementTypes.FUNCTION)
+                || this.getType().equals(FormulaElementTypes.CONSTANT)){
             result = operator.toString();
-        } else if(this.getType().equals(FormulaElementTypes.VARIABLE)){
+        } else if(this.getType().equals(FormulaElementTypes.VARIABLE)) {
             result = "x";
         }
 

@@ -13,21 +13,22 @@ public class FormulaParser {
     public FormulaParser(String userInput) {
         initOperationsTextForm();
 
-        this.userInput = userInput;
+        this.userInput = userInput.toLowerCase().replaceAll(" ", "");
     }
 
     public Function parse() {
 
-            parseFormulaTextIntoBlocks();
-            convertParsedTextIntoFormulaElements();
-            convertFormulaToRPN();
-            Function function = new Function();
-            function.setFunctionFormulaInRPN(formulaRPN);
+        parseFormulaTextIntoBlocks();
+        convertParsedTextIntoFormulaElements();
+        convertFormulaToRPN();
+
+        Function function = new Function();
+        function.setFunctionFormulaInRPN(formulaRPN);
 
         return function;
     }
 
-    private void parseFormulaTextIntoBlocks() {
+    public void parseFormulaTextIntoBlocks() {
 
         parsedFormulaText = new ArrayList<>();
         StringBuilder currentElement = new StringBuilder();
@@ -37,17 +38,14 @@ public class FormulaParser {
 
             SymbolCategory currentElementType = getSymbolCategory(symbol);
 
-            if (!currentElementType.equals(previousElementType)
-                    && currentElement.length() != 0) {
+            if (isOperator(currentElementType)
+                    || !currentElementType.equals(previousElementType)) {
 
                 addToParsedFormulaText(currentElement.toString(), previousElementType);
                 currentElement.setLength(0);
 
             }
-
-            if (currentElementType != SymbolCategory.SPACE) {
-                currentElement.append(symbol);
-            }
+            currentElement.append(symbol);
 
             previousElementType = currentElementType;
         }
@@ -55,10 +53,20 @@ public class FormulaParser {
             addToParsedFormulaText(currentElement.toString(), previousElementType);
         }
 
-        //System.out.println(parsedFormulaText.toString());
+//        System.out.println(parsedFormulaText.toString());
+    }
+
+    private boolean isOperator(SymbolCategory currentElementType) {
+        return !(currentElementType.equals(SymbolCategory.NUMBER)
+                || currentElementType.equals(SymbolCategory.OTHER));
     }
 
     private void addToParsedFormulaText(String text, SymbolCategory elementType) {
+
+        if (text.isEmpty()){
+            return;
+        }
+
         FormulaTextBlock newElement = new FormulaTextBlock(text, elementType);
 
         SymbolCategory previousElementType = SymbolCategory.NA;
@@ -83,10 +91,9 @@ public class FormulaParser {
         } else {
             parsedFormulaText.add(newElement);
         }
-
     }
 
-    private void convertParsedTextIntoFormulaElements() {
+    public void convertParsedTextIntoFormulaElements() {
 
         formulaIN = new ArrayList<>();
 
@@ -94,7 +101,7 @@ public class FormulaParser {
             FormulaElement element = convertTextBlockIntoFormulaElement(textBlock);
             formulaIN.add(element);
         }
-     //   System.out.println(formulaIN);
+        System.out.println(formulaIN);
     }
 
     private FormulaElement convertTextBlockIntoFormulaElement(FormulaTextBlock textBlock) {
@@ -126,6 +133,16 @@ public class FormulaParser {
             if (textBlock.text.equals("x")) {
 
                 formulaElement.setType(FormulaElementTypes.VARIABLE);
+
+            } else if (textBlock.text.equals("e")) {
+
+                formulaElement.setOperator(SupportedOperators.E);
+                formulaElement.setType(FormulaElementTypes.CONSTANT);
+
+            } else if (textBlock.text.equals("pi")) {
+
+                formulaElement.setOperator(SupportedOperators.PI);
+                formulaElement.setType(FormulaElementTypes.CONSTANT);
 
             } else {
 
@@ -163,7 +180,8 @@ public class FormulaParser {
     private void processFormulaElement(FormulaElement element) {
 
         if (element.getType().equals(FormulaElementTypes.NUMBER)
-                || element.getType().equals(FormulaElementTypes.VARIABLE)) {
+                || element.getType().equals(FormulaElementTypes.VARIABLE)
+                || element.getType().equals(FormulaElementTypes.CONSTANT)) {
 
             formulaRPN.add(element);
 
@@ -249,8 +267,6 @@ public class FormulaParser {
 
         if (isNumeric(symbol)) {
             result = SymbolCategory.NUMBER;
-        } else if (symbol == ' ') {
-            result = SymbolCategory.SPACE;
         } else if (symbol == '(') {
             result = SymbolCategory.OPEN_BRACKET;
         } else if (symbol == ')') {
@@ -281,10 +297,9 @@ public class FormulaParser {
         }
 
         return result;
-
     }
 
-    enum SymbolCategory {NUMBER, SPACE, OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, OTHER, NA}
+    enum SymbolCategory {NUMBER, OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, OTHER, NA}
 
     private class FormulaTextBlock {
         public String text;
@@ -301,4 +316,11 @@ public class FormulaParser {
         }
     }
 
+    public List<FormulaTextBlock> getParsedFormulaText() {
+        return parsedFormulaText;
+    }
+
+    public List<FormulaElement> getFormulaIN() {
+        return formulaIN;
+    }
 }

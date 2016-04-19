@@ -8,9 +8,8 @@ public class Function implements Calculative {
     private List<FormulaElement> functionFormulaInRPN;
     private double x;
 
-    public double setX(double x) {
+    public void setX(double x) {
         this.x = x;
-        return x;
     }
 
     public void setFunctionFormulaInRPN(List<FormulaElement> functionFormulaInRPN) {
@@ -38,6 +37,10 @@ public class Function implements Calculative {
             } else if (element.getType().equals(FormulaElementTypes.VARIABLE)){
 
                 calculationResult = x;
+
+            } else if (element.getType().equals(FormulaElementTypes.CONSTANT)){
+
+                calculationResult = getConstantValue(element.getOperator());
 
             } else if (element.getType().equals(FormulaElementTypes.OPERATOR)){
 
@@ -95,4 +98,17 @@ public class Function implements Calculative {
         return result;
     }
 
+    private double getConstantValue(SupportedOperators constant){
+        double result = 0;
+
+        if (constant.equals(SupportedOperators.E)) {
+            result = Math.E;
+        } else if (constant.equals(SupportedOperators.PI)){
+            result = Math.PI;
+        }
+
+        return result;
+    }
+
 }
+

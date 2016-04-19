@@ -8,20 +8,20 @@ public class UserInput {
 
     public double userInput(){
         boolean read = true;
-        double a = 0;
+        double userVariable = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         while(read) {
 
             try {
-                a = Double.parseDouble(reader.readLine());
+                userVariable = Double.parseDouble(reader.readLine());
                 read = false;
             } catch (Exception e1) {
                 System.out.println("Variable should be number. " + e1);
                 read = true;
             }
         }
-        return a;
+        return userVariable;
     }
 
     public String userInputFormula(){
