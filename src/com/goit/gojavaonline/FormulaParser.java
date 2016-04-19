@@ -101,7 +101,7 @@ public class FormulaParser {
             FormulaElement element = convertTextBlockIntoFormulaElement(textBlock);
             formulaIN.add(element);
         }
-        System.out.println(formulaIN);
+//        System.out.println(formulaIN);
     }
 
     private FormulaElement convertTextBlockIntoFormulaElement(FormulaTextBlock textBlock) {
@@ -163,7 +163,7 @@ public class FormulaParser {
         }
     }
 
-    private void convertFormulaToRPN() {
+    public void convertFormulaToRPN() {
 
         formulaRPN = new ArrayList<>();
         operationsStack = new Stack<>();
@@ -174,7 +174,7 @@ public class FormulaParser {
             formulaRPN.add(operationsStack.pop());
         }
 
-        //System.out.println(formulaRPN.toString());
+//        System.out.println(formulaRPN.toString());
     }
 
     private void processFormulaElement(FormulaElement element) {
@@ -322,5 +322,9 @@ public class FormulaParser {
 
     public List<FormulaElement> getFormulaIN() {
         return formulaIN;
+    }
+
+    public List<FormulaElement> getFormulaRPN() {
+        return formulaRPN;
     }
 }

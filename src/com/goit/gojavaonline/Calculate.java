@@ -10,9 +10,9 @@ public class Calculate {
         double x = 0;
         double firstTempFunction, secondTempFunction;
         double resultFunction = 0;
-        boolean accuracyLimit = true;
+        boolean accuracyLimit = false;
 
-        while (accuracyLimit) {
+        while (!accuracyLimit) {
             x = (a + b) / 2;
             userInputFunction.setX(x - e);
             firstTempFunction = userInputFunction.calculate();
@@ -29,9 +29,9 @@ public class Calculate {
                 x = (a + b) / 2;
                 userInputFunction.setX(x);
                 resultFunction = userInputFunction.calculate();
-                accuracyLimit = false;
-            } else {
                 accuracyLimit = true;
+            } else {
+                accuracyLimit = false;
             }
         }
         if(c == 1){
